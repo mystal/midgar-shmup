@@ -1,0 +1,10 @@
+[package]
+name = "midgar-shmup"
+version = "0.1.0"
+authors = ["Gabriel Martinez <reitaka@gmail.com>"]
+
+[dependencies]
+cgmath = "0.16"
+midgar = { git = "https://github.com/mystal/midgar-engine", branch = "jammin" }
+#rand = "0.5"
+specs = "0.11"
