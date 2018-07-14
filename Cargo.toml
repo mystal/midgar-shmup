@@ -7,4 +7,4 @@ authors = ["Gabriel Martinez <reitaka@gmail.com>"]
 cgmath = "0.16"
 midgar = { git = "https://github.com/mystal/midgar-engine", branch = "jammin" }
 #rand = "0.5"
-specs = "0.11"
+specs = "0.12"

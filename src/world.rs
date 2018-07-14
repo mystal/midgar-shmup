@@ -1,7 +1,7 @@
 use cgmath::Vector2;
 use cgmath::prelude::*;
 use midgar::{KeyCode, Midgar, MouseButton};
-use specs;
+use specs::{self, Builder};
 
 use components::*;
 use config;
@@ -25,11 +25,11 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         world.register::<Player>();
         world.register::<Camera>();
         //world.register::<Ai>();
-        //world.register::<Faction>();
-        //world.register::<Shooter>();
-        //world.register::<Projectile>();
-        //world.register::<Attacker>();
-        //world.register::<Health>();
+        world.register::<Faction>();
+        world.register::<Shooter>();
+        world.register::<Projectile>();
+        world.register::<Attacker>();
+        world.register::<Health>();
 
         // Add the player entity.
         let player_entity = world.create_entity()
