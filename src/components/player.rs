@@ -1,11 +1,13 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
+#[derive(Clone, Debug, Deserialize)]
 pub struct Player {
 }
 
 impl Component for Player {
     type Storage = specs::HashMapStorage<Player>;
 }
+
+impl InitFromBlueprint for Player {}

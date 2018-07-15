@@ -1,9 +1,8 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Collider {
     pub radius: u32,
 }
@@ -19,3 +18,5 @@ impl Collider {
 impl Component for Collider {
     type Storage = specs::VecStorage<Collider>;
 }
+
+impl InitFromBlueprint for Collider {}

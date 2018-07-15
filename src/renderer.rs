@@ -7,7 +7,7 @@ use midgar::graphics::sprite::{DrawTexture, MagnifySamplerFilter, SpriteDrawPara
 use midgar::graphics::texture::TextureRegion;
 use specs::{Join, ReadStorage};
 
-use components::{Camera, Position, Renderable};
+use components::{Camera, Renderable, Transform};
 use config;
 use world::GameWorld;
 
@@ -33,10 +33,10 @@ impl GameRenderer {
     }
 
     pub fn render(&mut self, midgar: &Midgar, _dt: f32, world: &mut GameWorld) {
-        world.world.exec(|(renderables, positions, cameras): (ReadStorage<Renderable>, ReadStorage<Position>, ReadStorage<Camera>)| {
-            let camera_pos = (&positions, &cameras).join()
+        world.world.exec(|(renderables, transforms, cameras): (ReadStorage<Renderable>, ReadStorage<Transform>, ReadStorage<Camera>)| {
+            let camera_pos = (&transforms, &cameras).join()
                 .next()
-                .expect("Lost the camera when trying to render!").0;
+                .expect("Lost the camera when trying to render!").0.position;
 
             // Compute the combined projection * view matrix.
             let camera_pos = cgmath::vec3(camera_pos.x.round(), camera_pos.y.round(), 0.0);
@@ -54,12 +54,13 @@ impl GameRenderer {
             target.clear_color(color[0] as f32 / 0.0, color[1] as f32 / 0.0, color[2] as f32 / 0.0, 1.0);
 
             // Draw each renderable.
-            for (renderable, pos) in (&renderables, &positions).join() {
+            for (renderable, transform) in (&renderables, &transforms).join() {
                 match *renderable {
                     Renderable::Shape(ref shape) => {
+                        let pos = transform.position;
                         // Round the positions so that shapes are drawn at pixel boundaries.
                         // Also draw with the origin in the center of the shape.
-                        self.shape.draw_filled_rect(pos.0.x.round(), pos.0.y.round(),
+                        self.shape.draw_filled_rect(pos.x.round(), pos.y.round(),
                                                     shape.width as f32, shape.height as f32,
                                                     shape.color, &mut target);
                     },

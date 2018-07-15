@@ -1,14 +1,13 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub enum Renderable {
     Shape(Shape),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Shape {
     pub width: u32,
     pub height: u32,
@@ -28,3 +27,5 @@ impl Renderable {
 impl Component for Renderable {
     type Storage = specs::VecStorage<Renderable>;
 }
+
+impl InitFromBlueprint for Renderable {}

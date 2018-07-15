@@ -1,8 +1,12 @@
 extern crate cgmath;
 extern crate midgar;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
 extern crate specs;
 
 mod app;
+mod blueprints;
 mod components;
 mod config;
 mod input;

@@ -1,0 +1,64 @@
+{
+  "Player": {
+    "Player": {},
+    "Transform": {},
+    "Velocity": {},
+    "Collider": {
+      "radius": 15
+    },
+    "Faction": "Player",
+    "Health": {
+      "max": 100
+    },
+    "Shooter": {
+      "projectile": "Projectile",
+      "delay": 1
+    },
+    "Renderable": {
+      "Shape": {
+        "width": 30,
+        "height": 30,
+        "color": [0.2, 0.8, 0.0]
+      }
+    }
+  },
+  "WorldCamera": {
+    "Transform": {},
+    "Camera": {}
+  },
+  "Enemy": {
+    "Transform": {},
+    "Velocity": {},
+    "Collider": {
+      "radius": 10
+    },
+    "Health": {
+      "max": 50
+    },
+    "Faction": "Enemy",
+    "Renderable": {
+      "Shape": {
+        "width": 20,
+        "height": 20,
+        "color": [0.8, 0.2, 0.0]
+      }
+    }
+  },
+  "Projectile": {
+    "Projectile": {
+      "lifetime": 5
+    },
+    "Transform": {},
+    "Velocity": {},
+    "Collider": {
+      "radius": 4
+    },
+    "Attacker": {
+      "damage": 10
+    },
+    "Faction": "Neutral",
+    "Sprite": {
+      "sprite": "BasicBullet"
+    }
+  }
+}

@@ -4,7 +4,10 @@ version = "0.1.0"
 authors = ["Gabriel Martinez <reitaka@gmail.com>"]
 
 [dependencies]
-cgmath = "0.16"
+cgmath = { version ="0.16", features = ["serde"] }
 midgar = { git = "https://github.com/mystal/midgar-engine", branch = "jammin" }
 #rand = "0.5"
+serde = "1"
+serde_derive = "1"
+serde_json = "1"
 specs = "0.12"

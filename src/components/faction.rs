@@ -1,9 +1,8 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Deserialize, Eq, PartialEq)]
 pub enum Faction {
     Neutral,
     Player,
@@ -19,3 +18,5 @@ impl Default for Faction {
 impl Component for Faction {
     type Storage = specs::VecStorage<Self>;
 }
+
+impl InitFromBlueprint for Faction {}

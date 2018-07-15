@@ -1,13 +1,15 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Health {
+    #[serde(default)]
     pub current: u32,
     pub max: u32,
+    #[serde(default)]
     pub dead: bool,
+    #[serde(default)]
     pub invulnerable: bool,
 }
 
@@ -31,4 +33,14 @@ impl Health {
 
 impl Component for Health {
     type Storage = specs::VecStorage<Self>;
+}
+
+impl InitFromBlueprint for Health {
+    fn init_from_blueprint(from: &Self) -> Self {
+        let mut health = from.clone();
+        if health.current == 0 {
+            health.current = health.max;
+        }
+        health
+    }
 }

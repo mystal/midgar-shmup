@@ -3,12 +3,23 @@ use std::ops::{Deref, DerefMut};
 use cgmath::{self, Vector2};
 use specs::{self, Component};
 
-#[derive(Clone, Copy, Debug)]
-pub struct Velocity(pub cgmath::Vector2<f32>);
+use components::InitFromBlueprint;
+
+fn default_velocity() -> Vector2<f32> {
+    cgmath::vec2(0.0, 0.0)
+}
+
+#[derive(Clone, Copy, Debug, Deserialize)]
+pub struct Velocity {
+    #[serde(default = "default_velocity")]
+    inner: cgmath::Vector2<f32>,
+}
 
 impl Velocity {
     pub fn new(x: f32, y: f32) -> Self {
-        Velocity(cgmath::vec2(x, y))
+        Velocity {
+            inner: cgmath::vec2(x, y),
+        }
     }
 }
 
@@ -20,12 +31,14 @@ impl Deref for Velocity {
     type Target = Vector2<f32>;
 
     fn deref(&self) -> &Self::Target {
-        &self.0
+        &self.inner
     }
 }
 
 impl DerefMut for Velocity {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
+        &mut self.inner
     }
 }
+
+impl InitFromBlueprint for Velocity {}

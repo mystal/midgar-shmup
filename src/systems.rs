@@ -20,20 +20,20 @@ impl<'a> System<'a> for PhysicsSystem {
     type SystemData = (
         Read<'a, DeltaTime>,
         ReadStorage<'a, Collider>,
-        WriteStorage<'a, Position>,
+        WriteStorage<'a, Transform>,
         WriteStorage<'a, Velocity>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (dt, colliders, mut positions, mut velocities) = data;
+        let (dt, colliders, mut transforms, mut velocities) = data;
 
         // TODO: Try to move entities, clamp to level bounds.
-        for (collider, pos, velocity) in (&colliders, &mut positions, &mut velocities).join() {
-            pos.0 += velocity.0 * dt.0;
+        for (collider, transform, velocity) in (&colliders, &mut transforms, &mut velocities).join() {
+            transform.position += **velocity * dt.0;
         }
 
         // TODO: Check overlap with any entities and emit events?
-        for (collider, pos) in (&colliders, &positions).join() {
+        for (collider, pos) in (&colliders, &transforms).join() {
             // TODO: If player hits enemy, die
             // TODO: If bullet hits enemy, enemy dies
         }
@@ -64,7 +64,7 @@ impl<'a> System<'a> for PlayerSystem {
         let move_speed = 500.0;
 
         for (_, velocity) in (&players, &mut velocities).join() {
-            velocity.0 = input.move_dir * move_speed;
+            **velocity = input.move_dir * move_speed;
 
             // TODO: Try to fire a projectile.
         }
@@ -86,18 +86,18 @@ impl CameraSystem {
 impl<'a> System<'a> for CameraSystem {
     type SystemData = (
         ReadStorage<'a, Camera>,
-        WriteStorage<'a, Position>,
+        WriteStorage<'a, Transform>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (cameras, mut positions) = data;
+        let (cameras, mut transforms) = data;
 
-        let player_position = positions.get(self.player_entity)
-            .expect("Lost player entity in CameraSystem!").0;
+        let player_position = transforms.get(self.player_entity)
+            .expect("Lost player entity in CameraSystem!").position;
 
         // TODO: Iterate over cameras and get their associated entity positions.
-        for (_, position) in (&cameras, &mut positions).join() {
-            position.0 = player_position;
+        for (_, transform) in (&cameras, &mut transforms).join() {
+            transform.position = player_position;
         }
     }
 }

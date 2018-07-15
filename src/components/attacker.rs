@@ -1,9 +1,8 @@
-use std::ops::{Deref, DerefMut};
+use specs::{self, Component};
 
-use cgmath::{self, Vector2};
-use specs::{self, Component, Entity};
+use components::InitFromBlueprint;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Attacker {
     pub damage: u32,
 }
@@ -11,3 +10,5 @@ pub struct Attacker {
 impl Component for Attacker {
     type Storage = specs::VecStorage<Self>;
 }
+
+impl InitFromBlueprint for Attacker {}
