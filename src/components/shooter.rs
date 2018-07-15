@@ -19,9 +19,19 @@ impl Default for FireState {
 #[derive(Clone, Debug, Deserialize)]
 pub struct Shooter {
     pub projectile: String,
-    pub delay: u32,
+    pub delay: f32,
     #[serde(default)]
     pub state: FireState,
+}
+
+impl Shooter {
+    pub fn try_firing(&mut self, dir: Vector2<f32>) -> bool {
+        if let FireState::Idle = self.state {
+            self.state = FireState::Fire(dir);
+            return true;
+        }
+        false
+    }
 }
 
 impl Component for Shooter {

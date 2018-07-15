@@ -1,11 +1,12 @@
-use cgmath::{InnerSpace, Vector2, Zero};
+use cgmath::{self, InnerSpace, Zero};
 use midgar::{KeyCode, Midgar, MouseButton};
 use specs::{self, Builder};
 
 use blueprints::BlueprintManager;
 use components::*;
 use config;
-use input::PlayerInput;
+use input::{FireInput, PlayerInput};
+use resources::*;
 use systems::*;
 
 pub struct GameWorld<'a, 'b> {
@@ -22,18 +23,17 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         let mut world = specs::World::new();
 
         // Register all components before trying to use them.
+        world.register::<Attacker>();
+        world.register::<Camera>();
+        world.register::<Collider>();
+        world.register::<Faction>();
+        world.register::<Health>();
+        world.register::<Player>();
+        world.register::<Projectile>();
+        world.register::<Renderable>();
+        world.register::<Shooter>();
         world.register::<Transform>();
         world.register::<Velocity>();
-        world.register::<Collider>();
-        world.register::<Renderable>();
-        world.register::<Player>();
-        world.register::<Camera>();
-        //world.register::<Ai>();
-        world.register::<Faction>();
-        world.register::<Shooter>();
-        world.register::<Projectile>();
-        world.register::<Attacker>();
-        world.register::<Health>();
 
         // Add the player entity.
         let player_entity = {
@@ -63,17 +63,16 @@ impl<'a, 'b> GameWorld<'a, 'b> {
                 .build()
         };
 
-        world.add_resource(DeltaTime(0.0));
-        world.add_resource(PlayerInput {
-            move_dir: Vector2::zero(),
-            fire_dir: Vector2::zero(),
-            fire: false,
-        });
+        world.add_resource(blueprints);
+        world.add_resource(DeltaTime::default());
+        world.add_resource(PlayerInput::default());
+        world.add_resource(SpawnQueue::default());
 
         // Create a dispatcher to run systems.
         let dispatcher = specs::DispatcherBuilder::new()
             .with(PlayerSystem::new(), "player", &[])
-            .with(PhysicsSystem::new(), "physics", &["player"])
+            .with(ShooterSystem::new(), "shooter", &["player"])
+            .with(PhysicsSystem::new(), "physics", &["shooter"])
             .with(CameraSystem::new(player_entity), "camera", &["physics"])
             .build();
 
@@ -109,10 +108,28 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             if !player_input.move_dir.is_zero() {
                 player_input.move_dir.normalize();
             }
-            player_input.fire_dir = Vector2::zero();
-            player_input.fire = midgar.input().is_button_held(MouseButton::Left);
+            player_input.fire = if input.was_key_pressed(KeyCode::Space) {
+                FireInput::Fire(cgmath::vec2(0.0, -1.0))
+            } else {
+                FireInput::Idle
+            };
         }
         self.dispatcher.dispatch(&mut self.world.res);
         self.world.maintain();
+
+        // Spawn new entities.
+        let spawns = {
+            // Clone and clear queued spawns.
+            let mut queued_spawns = self.world.write_resource::<SpawnQueue>();
+            // FIXME: Can we avoid this clone?
+            let cloned_spawns = queued_spawns.0.clone();
+            queued_spawns.0.clear();
+            cloned_spawns
+        };
+        // Spawn new entities.
+        for blueprint in spawns {
+            blueprint.create_entity(&mut self.world)
+                .build();
+        }
     }
 }

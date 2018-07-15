@@ -56,7 +56,14 @@
     "Attacker": {
       "damage": 10
     },
-    "Faction": "Neutral",
+    "Faction": "Player",
+    "Renderable": {
+      "Shape": {
+        "width": 10,
+        "height": 10,
+        "color": [0.0, 0.2, 0.8]
+      }
+    },
     "Sprite": {
       "sprite": "BasicBullet"
     }

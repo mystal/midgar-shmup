@@ -11,6 +11,7 @@ mod components;
 mod config;
 mod input;
 mod renderer;
+mod resources;
 mod systems;
 mod world;
 

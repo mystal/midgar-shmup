@@ -7,9 +7,9 @@ use serde_json as json;
 
 use components::*;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct BlueprintManager {
-    pub blueprints: HashMap<String, Blueprint>,
+    blueprints: HashMap<String, Blueprint>,
 }
 
 impl BlueprintManager {

@@ -27,6 +27,14 @@ impl Component for Velocity {
     type Storage = specs::VecStorage<Velocity>;
 }
 
+impl From<Vector2<f32>> for Velocity {
+    fn from(v: Vector2<f32>) -> Self {
+        Velocity {
+            inner: v,
+        }
+    }
+}
+
 impl Deref for Velocity {
     type Target = Vector2<f32>;
 
