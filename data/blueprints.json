@@ -12,7 +12,8 @@
     },
     "Shooter": {
       "projectile": "Projectile",
-      "delay": 1
+      "delay": 0.2,
+      "velocity": 500
     },
     "Renderable": {
       "Shape": {
@@ -46,7 +47,7 @@
   },
   "Projectile": {
     "Projectile": {
-      "lifetime": 5
+      "distance": 200
     },
     "Transform": {},
     "Velocity": {},

@@ -35,7 +35,7 @@ impl<'a> System<'a> for ShooterSystem {
                         .expect("Could not find blueprint for shooter projectile")
                         .clone();
                     blueprint.transform = Some(*transform);
-                    blueprint.velocity = Some((dir * 100.0).into());
+                    blueprint.velocity = Some((dir * shooter.velocity).into());
                     blueprint.faction = Some(*faction);
                     spawns.push(blueprint);
 

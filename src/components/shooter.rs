@@ -19,6 +19,7 @@ impl Default for FireState {
 #[derive(Clone, Debug, Deserialize)]
 pub struct Shooter {
     pub projectile: String,
+    pub velocity: f32,
     pub delay: f32,
     #[serde(default)]
     pub state: FireState,

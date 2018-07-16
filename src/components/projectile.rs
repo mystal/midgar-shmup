@@ -4,7 +4,7 @@ use components::InitFromBlueprint;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Projectile {
-    pub lifetime: Option<f32>,
+    pub distance: Option<f32>,
 }
 
 impl Component for Projectile {
