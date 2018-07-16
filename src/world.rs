@@ -67,13 +67,16 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         world.add_resource(DeltaTime::default());
         world.add_resource(PlayerInput::default());
         world.add_resource(SpawnQueue::default());
+        world.add_resource::<Vec<CollisionEvent>>(Vec::default());
 
         // Create a dispatcher to run systems.
         let dispatcher = specs::DispatcherBuilder::new()
             .with(PlayerSystem::new(), "player", &[])
             .with(ShooterSystem::new(), "shooter", &["player"])
-            .with(PhysicsSystem::new(), "physics", &["shooter"])
-            .with(CameraSystem::new(player_entity), "camera", &["physics"])
+            .with(MotionSystem::new(), "motion", &["shooter"])
+            .with(CollisionSystem::new(), "collision", &["motion"])
+            .with(AttackSystem::new(), "attack", &["collision"])
+            .with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 
         GameWorld {

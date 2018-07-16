@@ -3,17 +3,17 @@ use specs::{Join, Read, ReadStorage, System, WriteStorage};
 use components::*;
 use resources::DeltaTime;
 
-pub struct PhysicsSystem {
+pub struct MotionSystem {
 }
 
-impl PhysicsSystem {
+impl MotionSystem {
     pub fn new() -> Self {
-        PhysicsSystem {
+        MotionSystem {
         }
     }
 }
 
-impl<'a> System<'a> for PhysicsSystem {
+impl<'a> System<'a> for MotionSystem {
     type SystemData = (
         Read<'a, DeltaTime>,
         ReadStorage<'a, Collider>,

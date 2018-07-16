@@ -4,13 +4,16 @@ use components::InitFromBlueprint;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Collider {
-    pub radius: u32,
+    pub radius: f32,
+    #[serde(default)]
+    pub die: bool,
 }
 
 impl Collider {
-    pub fn new(radius: u32) -> Self {
+    pub fn new(radius: f32, die: bool) -> Self {
         Collider {
             radius,
+            die,
         }
     }
 }
