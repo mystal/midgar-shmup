@@ -1,11 +1,10 @@
-use cgmath::{self, InnerSpace, Zero};
-use midgar::{KeyCode, Midgar, MouseButton};
+use midgar::Midgar;
 use specs::{self, Builder};
 
 use blueprints::BlueprintManager;
 use components::*;
 use config;
-use input::{FireInput, PlayerInput};
+use input::{check_input, FireInput, PlayerInput};
 use resources::*;
 use systems::*;
 
@@ -92,30 +91,8 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         }
         {
             // Check player input.
-            let input = midgar.input();
             let mut player_input = self.world.write_resource::<PlayerInput>();
-            player_input.move_dir.x = match
-                (input.is_key_held(KeyCode::Left) || input.is_key_held(KeyCode::A),
-                 input.is_key_held(KeyCode::Right) || input.is_key_held(KeyCode::D)) {
-                (true, false) => -1.0,
-                (false, true) => 1.0,
-                _ => 0.0,
-            };
-            player_input.move_dir.y = match
-                (input.is_key_held(KeyCode::Up) || input.is_key_held(KeyCode::W),
-                 input.is_key_held(KeyCode::Down) || input.is_key_held(KeyCode::S)) {
-                (true, false) => -1.0,
-                (false, true) => 1.0,
-                _ => 0.0,
-            };
-            if !player_input.move_dir.is_zero() {
-                player_input.move_dir.normalize();
-            }
-            player_input.fire = if input.was_key_pressed(KeyCode::Space) {
-                FireInput::Fire(cgmath::vec2(0.0, -1.0))
-            } else {
-                FireInput::Idle
-            };
+            *player_input = check_input(midgar.input());
         }
         self.dispatcher.dispatch(&mut self.world.res);
         self.world.maintain();
