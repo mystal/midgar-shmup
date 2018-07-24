@@ -338,7 +338,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "midgar"
 version = "0.1.0"
-source = "git+https://github.com/mystal/midgar-engine?branch=jammin#d3769c6b7a410b671601e32740b141a95ac14552"
+source = "git+https://github.com/mystal/midgar-engine?branch=dev#8175581caa24e254da05bf225feb0ca1d9ee3891"
 dependencies = [
  "cgmath 0.16.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "glium 0.18.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -355,7 +355,7 @@ name = "midgar-shmup"
 version = "0.1.0"
 dependencies = [
  "cgmath 0.16.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "midgar 0.1.0 (git+https://github.com/mystal/midgar-engine?branch=jammin)",
+ "midgar 0.1.0 (git+https://github.com/mystal/midgar-engine?branch=dev)",
  "serde 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.22 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -845,7 +845,7 @@ dependencies = [
 "checksum lzw 0.10.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7d947cbb889ed21c2a84be6ffbaebf5b4e0f4340638cba0444907e38b56be084"
 "checksum maybe-owned 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "cfafcd6297ebe41aa1626d1555a4f445f5429e9ed824fbe44417626048860709"
 "checksum memoffset 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "0f9dc261e2b62d7a622bf416ea3c5245cdd5d9a7fcc428c0d06804dfce1775b3"
-"checksum midgar 0.1.0 (git+https://github.com/mystal/midgar-engine?branch=jammin)" = "<none>"
+"checksum midgar 0.1.0 (git+https://github.com/mystal/midgar-engine?branch=dev)" = "<none>"
 "checksum mopa 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "a785740271256c230f57462d3b83e52f998433a7062fc18f96d5999474a9f915"
 "checksum moving-average 0.1.0 (git+https://github.com/mystal/moving-average)" = "<none>"
 "checksum nodrop 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)" = "9a2228dca57108069a5262f2ed8bd2e82496d2e074a06d1ccc7ce1687b6ae0a2"
