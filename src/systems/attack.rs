@@ -13,15 +13,15 @@ impl AttackSystem {
 
 impl<'a> System<'a> for AttackSystem {
     type SystemData = (
-        Entities<'a>,
         Read<'a, Vec<CollisionEvent>>,
         ReadStorage<'a, Attacker>,
         ReadStorage<'a, Faction>,
         WriteStorage<'a, Health>,
+        Entities<'a>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, collisions, attackers, factions, mut healths) = data;
+        let (collisions, attackers, factions, mut healths, entities) = data;
 
         for event in &*collisions {
             // TODO: Check for friendly fire.

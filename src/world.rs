@@ -48,7 +48,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             let blueprint = blueprints.get("WorldCamera")
                 .expect("Could not find WorldCamera blueprint");
             blueprint.create_entity(&mut world)
-                .with(Transform::new(50.0, 50.0, 0.0))
+                .with(Transform::new(config::GAME_SIZE.x as f32 / 2.0, config::GAME_SIZE.y as f32 / 2.0, 0.0))
                 .build()
         };
 
@@ -75,7 +75,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             .with(MotionSystem::new(), "motion", &["shooter"])
             .with(CollisionSystem::new(), "collision", &["motion"])
             .with(AttackSystem::new(), "attack", &["collision"])
-            .with(CameraSystem::new(player_entity), "camera", &["attack"])
+            //.with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 
         GameWorld {
