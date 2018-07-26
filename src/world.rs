@@ -23,6 +23,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
 
         // Register all components before trying to use them.
         world.register::<Attacker>();
+        world.register::<Bomber>();
         world.register::<Camera>();
         world.register::<Collider>();
         world.register::<Faction>();
@@ -71,8 +72,9 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         // Create a dispatcher to run systems.
         let dispatcher = specs::DispatcherBuilder::new()
             .with(PlayerSystem::new(), "player", &[])
+            .with(BomberSystem::new(), "bomber", &["player"])
             .with(ShooterSystem::new(), "shooter", &["player"])
-            .with(MotionSystem::new(), "motion", &["shooter"])
+            .with(MotionSystem::new(), "motion", &["bomber", "shooter"])
             .with(CollisionSystem::new(), "collision", &["motion"])
             .with(AttackSystem::new(), "attack", &["collision"])
             //.with(CameraSystem::new(player_entity), "camera", &["attack"])

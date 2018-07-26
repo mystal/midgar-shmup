@@ -1,6 +1,7 @@
 use specs::{self, Builder};
 
 pub use self::attacker::Attacker;
+pub use self::bomber::{Bomber, BombState};
 pub use self::camera::Camera;
 pub use self::collider::Collider;
 pub use self::faction::Faction;
@@ -13,6 +14,7 @@ pub use self::transform::Transform;
 pub use self::velocity::Velocity;
 
 pub mod attacker;
+pub mod bomber;
 pub mod camera;
 pub mod collider;
 pub mod faction;
@@ -60,6 +62,7 @@ macro_rules! blueprint {
 
 blueprint! {
     attacker: Attacker,
+    bomber: Bomber,
     camera: Camera,
     collider: Collider,
     faction: Faction,

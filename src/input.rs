@@ -12,6 +12,7 @@ pub enum FireInput {
 pub struct PlayerInput {
     pub move_dir: Vector2<f32>,
     pub fire: FireInput,
+    pub bomb: bool,
 }
 
 impl Default for PlayerInput {
@@ -19,6 +20,7 @@ impl Default for PlayerInput {
         PlayerInput {
             move_dir: Vector2::zero(),
             fire: FireInput::Idle,
+            bomb: false,
         }
     }
 }
@@ -45,9 +47,11 @@ pub fn check_input(input: &Input) -> PlayerInput {
     } else {
         FireInput::Idle
     };
+    let bomb = input.was_key_pressed(KeyCode::Q) || controller.map(|c| c.was_button_pressed(Button::LeftShoulder)).unwrap_or(false);
 
     PlayerInput {
         move_dir: if !move_dir.is_zero() {move_dir.normalize()} else {Vector2::zero()},
         fire,
+        bomb,
     }
 }

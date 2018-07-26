@@ -15,6 +15,10 @@
       "delay": 0.2,
       "velocity": 500
     },
+    "Bomber": {
+      "count": 3,
+      "delay": 5
+    },
     "Renderable": {
       "Shape": {
         "width": 30,
