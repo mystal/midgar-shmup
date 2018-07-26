@@ -39,18 +39,15 @@ pub fn check_input(input: &Input) -> PlayerInput {
         (false, true) => 1.0,
         _ => 0.0,
     };
-    let mut move_dir = cgmath::vec2(x, y);
-    if !move_dir.is_zero() {
-        move_dir.normalize();
-    }
-    let fire = if input.was_key_pressed(KeyCode::Space) || controller.map(|c| c.is_button_held(Button::RightShoulder)).unwrap_or(false) {
+    let move_dir = cgmath::vec2(x, y);
+    let fire = if input.is_key_held(KeyCode::Space) || controller.map(|c| c.is_button_held(Button::RightShoulder)).unwrap_or(false) {
         FireInput::Fire(cgmath::vec2(0.0, -1.0))
     } else {
         FireInput::Idle
     };
 
     PlayerInput {
-        move_dir,
+        move_dir: if !move_dir.is_zero() {move_dir.normalize()} else {Vector2::zero()},
         fire,
     }
 }
