@@ -4,20 +4,32 @@ use cgmath::{self, EuclideanSpace};
 use midgar::{Midgar, Surface};
 use midgar::graphics::shape::ShapeRenderer;
 use midgar::graphics::sprite::{DrawTexture, MagnifySamplerFilter, SpriteDrawParams, SpriteRenderer};
+use midgar::graphics::text::{self, Font, TextRenderer};
 use midgar::graphics::texture::TextureRegion;
-use specs::{Join, ReadStorage};
+use specs::{Entities, Join, ReadStorage};
 
-use components::{Camera, Renderable, Transform};
+use components::*;
 use config;
 use world::GameWorld;
 
-pub struct GameRenderer {
+type RenderData<'a> = (
+    ReadStorage<'a, Bomber>,
+    ReadStorage<'a, Camera>,
+    ReadStorage<'a, Player>,
+    ReadStorage<'a, Renderable>,
+    ReadStorage<'a, Transform>,
+);
+
+pub struct GameRenderer<'a> {
     sprite: SpriteRenderer,
     shape: ShapeRenderer,
+    text: TextRenderer<'a>,
     projection: cgmath::Matrix4<f32>,
+
+    font: Font<'a>,
 }
 
-impl GameRenderer {
+impl<'a> GameRenderer<'a> {
     pub fn new(midgar: &Midgar) -> Self {
         let viewport_width = config::GAME_SIZE.x as f32;
         let viewport_height = config::GAME_SIZE.y as f32;
@@ -28,12 +40,15 @@ impl GameRenderer {
         GameRenderer {
             sprite: SpriteRenderer::new(midgar.graphics().display(), projection),
             shape: ShapeRenderer::new(midgar.graphics().display(), projection),
+            text: TextRenderer::new(midgar.graphics().display()),
             projection,
+
+            font: text::load_font_from_path("assets/fonts/Kenney Pixel.ttf"),
         }
     }
 
     pub fn render(&mut self, midgar: &Midgar, _dt: f32, world: &mut GameWorld) {
-        world.world.exec(|(renderables, transforms, cameras): (ReadStorage<Renderable>, ReadStorage<Transform>, ReadStorage<Camera>)| {
+        world.world.exec(|(bombers, cameras, players, renderables, transforms): RenderData| {
             let camera_pos = (&transforms, &cameras).join()
                 .next()
                 .expect("Lost the camera when trying to render!").0.position;
@@ -66,6 +81,21 @@ impl GameRenderer {
                     },
                 }
             }
+
+            // Draw UI.
+            let projection = cgmath::ortho(0.0, config::SCREEN_SIZE.x as f32,
+                                           config::SCREEN_SIZE.y as f32, 0.0,
+                                           -1.0, 1.0);
+            // Get the player entity's number of bombs.
+            let bomb_count = if let Some((bomber, _)) = (&bombers, &players).join().next() {
+                bomber.count
+            } else {
+                0
+            };
+            // Draw number of bombs in stock.
+            let bomb_count_text = format!("Bomb: {:02}", bomb_count);
+            self.text.draw_text(&bomb_count_text, self.font.clone(), [1.0, 1.0, 1.0],
+                                40, 40.0, 30.0, 800, &projection, &mut target);
 
             // Finish this frame.
             target.finish()

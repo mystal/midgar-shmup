@@ -3,12 +3,12 @@ use midgar::{self, KeyCode, Midgar};
 use renderer::GameRenderer;
 use world::GameWorld;
 
-pub struct GameApp<'a, 'b> {
+pub struct GameApp<'a, 'b, 'c> {
     world: GameWorld<'a, 'b>,
-    renderer: GameRenderer,
+    renderer: GameRenderer<'c>,
 }
 
-impl<'a, 'b> midgar::App for GameApp<'a, 'b> {
+impl<'a, 'b, 'c> midgar::App for GameApp<'a, 'b, 'c> {
     fn create(midgar: &Midgar) -> Self {
         let world = GameWorld::new(midgar);
         let renderer = GameRenderer::new(midgar);
