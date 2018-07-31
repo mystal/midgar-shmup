@@ -28,6 +28,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         world.register::<Collider>();
         world.register::<Faction>();
         world.register::<Health>();
+        world.register::<Pickup>();
         world.register::<Player>();
         world.register::<Projectile>();
         world.register::<Renderable>();
@@ -63,6 +64,16 @@ impl<'a, 'b> GameWorld<'a, 'b> {
                 .build()
         };
 
+        // Add a bomb pickup.
+        // TODO: Remove this when we have a pickup spawning system in place.
+        let bomb_entity = {
+            let blueprint = blueprints.get("BombPickup")
+                .expect("Could not find BombPickup blueprint");
+            blueprint.create_entity(&mut world)
+                .with(Transform::new(200.0, 200.0, 0.0))
+                .build()
+        };
+
         world.add_resource(blueprints);
         world.add_resource(DeltaTime::default());
         world.add_resource(PlayerInput::default());
@@ -77,6 +88,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             .with(MotionSystem::new(), "motion", &["bomber", "shooter"])
             .with(CollisionSystem::new(), "collision", &["motion"])
             .with(AttackSystem::new(), "attack", &["collision"])
+            .with(PickupSystem::new(), "pickup", &["collision"])
             //.with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 

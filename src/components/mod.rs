@@ -6,6 +6,7 @@ pub use self::camera::Camera;
 pub use self::collider::Collider;
 pub use self::faction::Faction;
 pub use self::health::Health;
+pub use self::pickup::Pickup;
 pub use self::player::Player;
 pub use self::projectile::Projectile;
 pub use self::renderable::{Renderable, Shape};
@@ -19,6 +20,7 @@ pub mod camera;
 pub mod collider;
 pub mod faction;
 pub mod health;
+pub mod pickup;
 pub mod player;
 pub mod projectile;
 pub mod renderable;
@@ -67,6 +69,7 @@ blueprint! {
     collider: Collider,
     faction: Faction,
     health: Health,
+    pickup: Pickup,
     player: Player,
     projectile: Projectile,
     renderable: Renderable,

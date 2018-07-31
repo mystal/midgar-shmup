@@ -3,6 +3,7 @@ pub use self::bomber::BomberSystem;
 pub use self::camera::CameraSystem;
 pub use self::collision::{CollisionEvent, CollisionSystem};
 pub use self::motion::MotionSystem;
+pub use self::pickup::PickupSystem;
 pub use self::player::PlayerSystem;
 pub use self::shooter::ShooterSystem;
 
@@ -11,5 +12,6 @@ mod bomber;
 mod camera;
 mod collision;
 mod motion;
+mod pickup;
 mod player;
 mod shooter;
