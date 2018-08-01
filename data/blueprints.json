@@ -8,7 +8,7 @@
     },
     "Faction": "Player",
     "Health": {
-      "max": 100
+      "max": 1
     },
     "Shooter": {
       "projectile": "Projectile",
@@ -39,6 +39,9 @@
     },
     "Health": {
       "max": 50
+    },
+    "Attacker": {
+      "damage": 10
     },
     "Faction": "Enemy",
     "Renderable": {
