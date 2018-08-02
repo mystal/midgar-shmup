@@ -21,3 +21,6 @@ impl DerefMut for SpawnQueue {
         &mut self.0
     }
 }
+
+#[derive(Clone, Debug, Default)]
+pub struct PlayerScore(pub u32);

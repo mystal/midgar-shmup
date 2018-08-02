@@ -6,13 +6,15 @@ use midgar::graphics::shape::ShapeRenderer;
 use midgar::graphics::sprite::{DrawTexture, MagnifySamplerFilter, SpriteDrawParams, SpriteRenderer};
 use midgar::graphics::text::{self, Font, TextRenderer};
 use midgar::graphics::texture::TextureRegion;
-use specs::{Entities, Join, ReadStorage};
+use specs::{Entities, Join, Read, ReadStorage};
 
 use components::*;
 use config;
+use resources::PlayerScore;
 use world::GameWorld;
 
 type RenderData<'a> = (
+    Read<'a, PlayerScore>,
     ReadStorage<'a, Bomber>,
     ReadStorage<'a, Camera>,
     ReadStorage<'a, Player>,
@@ -48,7 +50,7 @@ impl<'a> GameRenderer<'a> {
     }
 
     pub fn render(&mut self, midgar: &Midgar, _dt: f32, world: &mut GameWorld) {
-        world.world.exec(|(bombers, cameras, players, renderables, transforms): RenderData| {
+        world.world.exec(|(score, bombers, cameras, players, renderables, transforms): RenderData| {
             let camera_pos = (&transforms, &cameras).join()
                 .next()
                 .expect("Lost the camera when trying to render!").0.position;
@@ -96,6 +98,11 @@ impl<'a> GameRenderer<'a> {
             let bomb_count_text = format!("Bomb: {:02}", bomb_count);
             self.text.draw_text(&bomb_count_text, self.font.clone(), [1.0, 1.0, 1.0],
                                 40, 40.0, 30.0, 800, &projection, &mut target);
+
+            // Draw player score.
+            let player_score_text = format!("Score: {}", score.0);
+            self.text.draw_text(&player_score_text, self.font.clone(), [1.0, 1.0, 1.0],
+                                40, 800.0, 30.0, 800, &projection, &mut target);
 
             // Finish this frame.
             target.finish()

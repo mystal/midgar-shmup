@@ -1,6 +1,7 @@
-use specs::{Entities, Read, ReadStorage, System, WriteStorage};
+use specs::{Entities, Read, ReadStorage, System, Write, WriteStorage};
 
 use components::*;
+use resources::PlayerScore;
 use systems::CollisionEvent;
 
 pub struct AttackSystem;
@@ -14,6 +15,7 @@ impl AttackSystem {
 impl<'a> System<'a> for AttackSystem {
     type SystemData = (
         Read<'a, Vec<CollisionEvent>>,
+        Write<'a, PlayerScore>,
         ReadStorage<'a, Attacker>,
         ReadStorage<'a, Faction>,
         WriteStorage<'a, Health>,
@@ -21,7 +23,7 @@ impl<'a> System<'a> for AttackSystem {
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (collisions, attackers, factions, mut healths, entities) = data;
+        let (collisions, mut score, attackers, factions, mut healths, entities) = data;
 
         for event in &*collisions {
             // TODO: Check for friendly fire.
@@ -38,6 +40,12 @@ impl<'a> System<'a> for AttackSystem {
 
                 // TODO: Can we send an event on death? To perform certain logic?
                 if was_alive && health.dead {
+                    // TODO: Move this somewhere more central, in case things die for other
+                    // reasons?
+                    if let Some(Faction::Player) = factions.get(event.entity_a) {
+                        score.0 += 10;
+                    }
+
                     // Delete the attacked entity.
                     entities.delete(event.entity_b)
                         .unwrap();

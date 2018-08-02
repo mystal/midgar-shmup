@@ -77,6 +77,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
         world.add_resource(blueprints);
         world.add_resource(DeltaTime::default());
         world.add_resource(PlayerInput::default());
+        world.add_resource(PlayerScore::default());
         world.add_resource(SpawnQueue::default());
         world.add_resource::<Vec<CollisionEvent>>(Vec::default());
 
