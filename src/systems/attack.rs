@@ -40,7 +40,7 @@ impl<'a> System<'a> for AttackSystem {
                 // TODO: Can we send an event on death? To perform certain logic?
                 if was_alive && health.dead {
                     // TODO: Move this somewhere more central, in case things die for other
-                    // reasons?
+                    // reasons.
                     if let Some(Faction::Player) = factions.get(event.entity_a) {
                         score.0 += 10;
                     }
