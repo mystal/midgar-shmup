@@ -36,7 +36,6 @@ impl<'a> System<'a> for AttackSystem {
             if let (Some(attacker), Some(health)) = (attackers.get(event.entity_a), healths.get_mut(event.entity_b)) {
                 let was_alive = !health.dead;
                 health.take_damage(attacker.damage);
-                println!("Ouch!");
 
                 // TODO: Can we send an event on death? To perform certain logic?
                 if was_alive && health.dead {

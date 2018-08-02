@@ -27,8 +27,6 @@ impl<'a> System<'a> for BomberSystem {
         for (faction, bomber) in (&factions, &mut bombers).join() {
             bomber.state = match bomber.state {
                 BombState::Bomb => {
-                    println!("BOOM!");
-
                     // Kill all enemies!
                     for (other_faction, entity) in (&factions, &*entities).join() {
                         if (faction != other_faction) || *faction == Faction::Neutral {

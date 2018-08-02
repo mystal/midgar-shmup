@@ -4,7 +4,7 @@ use specs::{self, Builder};
 use blueprints::BlueprintManager;
 use components::*;
 use config;
-use input::{check_input, FireInput, PlayerInput};
+use input::{check_input, PlayerInput};
 use resources::*;
 use systems::*;
 
@@ -54,26 +54,6 @@ impl<'a, 'b> GameWorld<'a, 'b> {
                 .build()
         };
 
-        // Add an enemy that follows the player.
-        // TODO: Remove this when we have an enemy spawning system in place.
-        let enemy_entity = {
-            let blueprint = blueprints.get("Enemy")
-                .expect("Could not find Enemy blueprint");
-            blueprint.create_entity(&mut world)
-                .with(Transform::new(100.0, 100.0, 0.0))
-                .build()
-        };
-
-        // Add a bomb pickup.
-        // TODO: Remove this when we have a pickup spawning system in place.
-        let bomb_entity = {
-            let blueprint = blueprints.get("BombPickup")
-                .expect("Could not find BombPickup blueprint");
-            blueprint.create_entity(&mut world)
-                .with(Transform::new(200.0, 200.0, 0.0))
-                .build()
-        };
-
         world.add_resource(blueprints);
         world.add_resource(DeltaTime::default());
         world.add_resource(PlayerInput::default());
@@ -91,8 +71,8 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             .with(CollisionSystem::new(), "collision", &["despawn"])
             .with(AttackSystem::new(), "attack", &["collision"])
             .with(PickupSystem::new(), "pickup", &["collision"])
-            .with(PickupSpawnSystem::new(2.0), "pickup_spawn", &["attack", "pickup"])
-            .with(EnemySpawnSystem::new(2.0), "enemy_spawn", &["attack", "pickup"])
+            .with(PickupSpawnSystem::new(16.0), "pickup_spawn", &["attack", "pickup"])
+            .with(EnemySpawnSystem::new(8.0), "enemy_spawn", &["attack", "pickup"])
             //.with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 

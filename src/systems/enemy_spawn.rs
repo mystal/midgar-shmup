@@ -35,14 +35,22 @@ impl<'a> System<'a> for EnemySpawnSystem {
         } else {
             let mut rng = thread_rng();
 
-            // TODO: Spawn a wave of enemies.
-            let mut blueprint = blueprints.get("Enemy")
-                .expect("Could not find Enemy blueprint")
-                .clone();
-            blueprint.transform = Some(Transform::new(rng.gen_range(10.0, config::GAME_SIZE.x as f32 - 10.0),
-                                                      rng.gen_range(30.0, 200.0), 0.0));
-            blueprint.velocity = Some(Velocity::new(0.0, 100.0));
-            spawns.push(blueprint);
+            // Spawn a wave of enemies.
+            let x = rng.gen_range(10.0, config::GAME_SIZE.x as f32 - 10.0);
+            let blueprint = blueprints.get("Enemy")
+                .expect("Could not find Enemy blueprint");
+            let mut to_spawn = blueprint.clone();
+            to_spawn.velocity = Some(Velocity::new(0.0, 100.0));
+            to_spawn.transform = Some(Transform::new(x, -100.0, 0.0));
+            spawns.push(to_spawn);
+            let mut to_spawn = blueprint.clone();
+            to_spawn.velocity = Some(Velocity::new(0.0, 100.0));
+            to_spawn.transform = Some(Transform::new(x, -150.0, 0.0));
+            spawns.push(to_spawn);
+            let mut to_spawn = blueprint.clone();
+            to_spawn.velocity = Some(Velocity::new(0.0, 100.0));
+            to_spawn.transform = Some(Transform::new(x, -200.0, 0.0));
+            spawns.push(to_spawn);
 
             self.timer = self.spawn_time;
         }
