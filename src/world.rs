@@ -90,6 +90,7 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             .with(CollisionSystem::new(), "collision", &["motion"])
             .with(AttackSystem::new(), "attack", &["collision"])
             .with(PickupSystem::new(), "pickup", &["collision"])
+            .with(PickupSpawnSystem::new(2.0), "pickup_spawn", &["attack", "pickup"])
             //.with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 

@@ -1,5 +1,6 @@
 extern crate cgmath;
 extern crate midgar;
+extern crate rand;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;

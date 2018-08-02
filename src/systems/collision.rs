@@ -46,7 +46,7 @@ impl<'a> System<'a> for CollisionSystem {
                             (collider.collide_with_faction && other_collider.collide_with_faction)*/;
 
                         if overlap && faction_check {
-                            println!("Collision: {:?}, {:?}", entity, other_entity);
+                            //println!("Collision: {:?}, {:?}", entity, other_entity);
 
                             // Store collision events.
                             // NOTE: We always send two events right now, but eventually it may
