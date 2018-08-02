@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use cgmath::{self, EuclideanSpace};
-use midgar::{Midgar, Surface};
+use midgar::{KeyCode, Midgar, Surface};
 use midgar::graphics::shape::ShapeRenderer;
 use midgar::graphics::sprite::{DrawTexture, MagnifySamplerFilter, SpriteDrawParams, SpriteRenderer};
 use midgar::graphics::text::{self, Font, TextRenderer};
@@ -20,6 +20,7 @@ type RenderData<'a> = (
     ReadStorage<'a, Player>,
     ReadStorage<'a, Renderable>,
     ReadStorage<'a, Transform>,
+    Entities<'a>,
 );
 
 pub struct GameRenderer<'a> {
@@ -29,6 +30,8 @@ pub struct GameRenderer<'a> {
     projection: cgmath::Matrix4<f32>,
 
     font: Font<'a>,
+
+    render_debug: bool,
 }
 
 impl<'a> GameRenderer<'a> {
@@ -39,18 +42,24 @@ impl<'a> GameRenderer<'a> {
                                        viewport_height / 2.0, -viewport_height / 2.0,
                                        -1.0, 1.0);
 
-        GameRenderer {
+        Self {
             sprite: SpriteRenderer::new(midgar.graphics().display(), projection),
             shape: ShapeRenderer::new(midgar.graphics().display(), projection),
             text: TextRenderer::new(midgar.graphics().display()),
             projection,
 
             font: text::load_font_from_path("assets/fonts/Kenney Pixel.ttf"),
+
+            render_debug: false,
         }
     }
 
     pub fn render(&mut self, midgar: &Midgar, _dt: f32, world: &mut GameWorld) {
-        world.world.exec(|(score, bombers, cameras, players, renderables, transforms): RenderData| {
+        if midgar.input().was_key_pressed(KeyCode::Tab) {
+            self.render_debug = !self.render_debug;
+        }
+
+        world.world.exec(|(score, bombers, cameras, players, renderables, transforms, entities): RenderData| {
             let camera_pos = (&transforms, &cameras).join()
                 .next()
                 .expect("Lost the camera when trying to render!").0.position;
@@ -103,6 +112,14 @@ impl<'a> GameRenderer<'a> {
             let player_score_text = format!("Score: {}", score.0);
             self.text.draw_text(&player_score_text, self.font.clone(), [1.0, 1.0, 1.0],
                                 40, 800.0, 30.0, 800, &projection, &mut target);
+
+            if self.render_debug {
+                // Draw number of entities.
+                let entity_count = entities.join().count();
+                let entity_count_text = format!("Entities: {}", entity_count);
+                self.text.draw_text(&entity_count_text, self.font.clone(), [1.0, 1.0, 1.0],
+                                    30, 800.0, 720.0, 800, &projection, &mut target);
+            }
 
             // Finish this frame.
             target.finish()

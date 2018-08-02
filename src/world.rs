@@ -87,10 +87,12 @@ impl<'a, 'b> GameWorld<'a, 'b> {
             .with(BomberSystem::new(), "bomber", &["player"])
             .with(ShooterSystem::new(), "shooter", &["player"])
             .with(MotionSystem::new(), "motion", &["bomber", "shooter"])
-            .with(CollisionSystem::new(), "collision", &["motion"])
+            .with(DespawnSystem::new(), "despawn", &["motion"])
+            .with(CollisionSystem::new(), "collision", &["despawn"])
             .with(AttackSystem::new(), "attack", &["collision"])
             .with(PickupSystem::new(), "pickup", &["collision"])
             .with(PickupSpawnSystem::new(2.0), "pickup_spawn", &["attack", "pickup"])
+            .with(EnemySpawnSystem::new(2.0), "enemy_spawn", &["attack", "pickup"])
             //.with(CameraSystem::new(player_entity), "camera", &["attack"])
             .build();
 

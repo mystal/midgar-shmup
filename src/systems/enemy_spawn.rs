@@ -6,12 +6,12 @@ use components::*;
 use config;
 use resources::*;
 
-pub struct PickupSpawnSystem {
+pub struct EnemySpawnSystem {
     timer: f32,
     spawn_time: f32,
 }
 
-impl PickupSpawnSystem {
+impl EnemySpawnSystem {
     pub fn new(spawn_time: f32) -> Self {
         Self {
             timer: spawn_time,
@@ -20,7 +20,7 @@ impl PickupSpawnSystem {
     }
 }
 
-impl<'a> System<'a> for PickupSpawnSystem {
+impl<'a> System<'a> for EnemySpawnSystem {
     type SystemData = (
         Read<'a, BlueprintManager>,
         Read<'a, DeltaTime>,
@@ -35,13 +35,13 @@ impl<'a> System<'a> for PickupSpawnSystem {
         } else {
             let mut rng = thread_rng();
 
-            // Spawn a bomb pickup.
-            let mut blueprint = blueprints.get("BombPickup")
-                .expect("Could not find BombPickup blueprint")
+            // TODO: Spawn a wave of enemies.
+            let mut blueprint = blueprints.get("Enemy")
+                .expect("Could not find Enemy blueprint")
                 .clone();
             blueprint.transform = Some(Transform::new(rng.gen_range(10.0, config::GAME_SIZE.x as f32 - 10.0),
                                                       rng.gen_range(30.0, 200.0), 0.0));
-            blueprint.velocity = Some(Velocity::new(0.0, 50.0));
+            blueprint.velocity = Some(Velocity::new(0.0, 100.0));
             spawns.push(blueprint);
 
             self.timer = self.spawn_time;
